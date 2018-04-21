@@ -116,7 +116,7 @@ public class Solution {
         return ret;
     }
 
-    public static void main(String[] args){
+    public static void ans(){
         Scanner in = new Scanner(System.in);
 
         int n;int m;
@@ -131,6 +131,31 @@ public class Solution {
         int ret=cal(n,m,sAry);
         System.out.println(ret);
         in.close();
+    }
+
+    public static void test(){
+        Random rand=new Random(0);
+        for(int i=0;i<10;++i){
+            int n=1+rand.nextInt(50);
+            int m=1+rand.nextInt(n);
+            int[] sAry=new int[n];
+            for(int j=0;j<n;++j){
+                sAry[j]=1+rand.nextInt(100);
+            }
+            //System.out.format("XCLMPNZI %d\n",i);
+            //System.out.format("%d %d\n",n,m);
+            //for(int s:sAry)System.out.format("%d ",s);
+            //System.out.println();
+            System.out.format("%d\n",cal(n,m,sAry));
+        }
+    }
+
+    public static void main(String[] args){
+        if(args.length==0){
+            ans();
+        }else{
+            test();
+        }
     }
     
 }
