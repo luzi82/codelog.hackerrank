@@ -5,6 +5,9 @@ set -e
 export OUTPUT_PATH=out.txt
 
 javac Solution.java
+javac CycleTest.java
+
+java CycleTest
 
 echo sample1
 
