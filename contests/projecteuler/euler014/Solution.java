@@ -8,28 +8,31 @@ import java.util.regex.*;
 
 public class Solution {
 
-    static Map<Integer,Integer> collatzLenMapValue = new HashMap<Integer,Integer>();
+    // static Map<Integer,Integer> collatzLenMapValue = new HashMap<Integer,Integer>();
+    static int[] collatzLenAryValue = new int[5000000*3+10];
 
     public static int getCollatzLen(int v){
-        LinkedList<Integer> collatzSeq = new LinkedList<Integer>();
+        LinkedList<Long> collatzSeq = new LinkedList<Long>();
         
-        int vv = v;
-        while(!collatzLenMapValue.containsKey(vv)){
+        long vv = v;
+        while((vv>=collatzLenAryValue.length)||(collatzLenAryValue[(int)vv]==0)){
             collatzSeq.add(vv);
             if(vv%2==0)vv/=2;
             else vv=3*vv+1;
         }
         
-        int collatzLen = collatzLenMapValue.get(vv);
+        int collatzLen = collatzLenAryValue[(int)vv];
         ++collatzLen;
         
         while(!collatzSeq.isEmpty()){
             vv = collatzSeq.pollLast();
-            collatzLenMapValue.put(vv,collatzLen);
+            if(vv<collatzLenAryValue.length){
+                collatzLenAryValue[(int)vv]=collatzLen;
+            }
             ++collatzLen;
         }
         
-        return collatzLenMapValue.get(v);
+        return collatzLenAryValue[v];
     }
     
     static int[] maxCollatzLen = new int[5000000+10];
@@ -53,7 +56,8 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        collatzLenMapValue.put(1,1);
+        //collatzLenMapValue.put(1,1);
+        collatzLenAryValue[1]=1;
         maxCollatzLen[0]=0;
     
         Scanner in = new Scanner(System.in);
