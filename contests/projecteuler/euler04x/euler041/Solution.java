@@ -19,18 +19,11 @@ public class Solution {
             nAryMax = Math.max(nAryMax,n);
         }
         
-        preparePrime((int)(Math.sqrt(nAryMax)+1));
         preparePandigitalList(nAryMax+1);
-        
-        int[] pandigitalAry = new int[pandigitalList.size()];
-        int idx=0;
-        for(Integer pandigital:pandigitalList){
-            pandigitalAry[idx]=pandigital;
-            ++idx;
-        }
+        Integer[] pandigitalAry = pandigitalList.toArray(new Integer[0]);
         
         for(int n:nAry){
-            int i=Array.binarySearch(pandigitalAry, n);
+            int i=Arrays.binarySearch(pandigitalAry, n);
             if(i<0){
                 i=-i-2;
             }
@@ -39,39 +32,78 @@ public class Solution {
         }
     }
 
-    static Vector<Integer> primeV=new Vector<Integer>();
-    static void preparePrime(int max){
-        if(primeV.size()==0){
-            primeV.add(2);
+    static int primeNextTest = 3;
+    static HashSet<Integer> primeSet = new HashSet<Integer>();
+    static LinkedList<Integer> primeList = new LinkedList<Integer>();
+    static {primeSet.add(2);primeList.add(2);}
+    static boolean isPrime(int v){
+        if(v<=1)return false;
+        if(primeSet.contains(v))return true;
+        for(int p:primeList){
+            if(v%p==0)return false;
+            if(p*p>v){
+                primeSet.add(v);
+                return true;
+            }
         }
-        int p=3;
-        while(p<max){
-            boolean isPrime=true;
-            for(int pp:primeV){
-                if(p%pp==0){isPrime=false;break;}
-                if(pp*pp>p){break;}
+        while(true){
+            boolean pntIsPrime = true;
+            if(!primeSet.contains(primeNextTest)){
+                for(int p:primeList){
+                    if(primeNextTest%p==0){
+                        pntIsPrime = false;
+                        break;
+                    }
+                    if(p*p>primeNextTest)break;
+                }
+                if(pntIsPrime){
+                    primeSet.add(primeNextTest);
+                }
             }
-            if(isPrime){
-                primeV.add(p);
+            if(pntIsPrime){
+                primeList.add(primeNextTest);
             }
-            p+=2;
+            int pnt=primeNextTest;
+            ++primeNextTest;
+            if(v%pnt==0)return false;
+            if(pnt*pnt>v){
+                primeSet.add(v);
+                return true;
+            }
         }
     }
     
-    static LinkedList<Integer> pandigitalList = new LinkedList<>;
+    static LinkedList<Integer> pandigitalList = new LinkedList<>();
     static void preparePandigitalList(int max){
+        //System.out.println(max);
         for(int d=1;d<=9;++d){
-            boolean[] used = new boolean[d+1];
-            StringBuffer sb = new StringBuffer();
-            boolean big = dfs(sb,used);
-            if(big)break;
+            TreeSet<Integer> available = new TreeSet<Integer>();
+            for(int i=1;i<=d;++i){
+                available.add(i);
+            }
+            boolean cont = dfs(0,available,max);
+            if(!cont)break;
         }
     }
     
-    static boolean (StringBuffer sb,boolean used){
-        if(sb.length()>used.length){
-            
+    static boolean dfs(int prefix,TreeSet<Integer> availableSet,int max){
+        //System.out.println("dfs "+prefix);
+        if(availableSet.size()==0){
+            if(prefix>=max)return false;
+            //System.out.println(prefix);
+            if(isPrime(prefix)){
+                pandigitalList.add(prefix);
+            }
+            return true;
         }
+        Integer[] availableAry = availableSet.toArray(new Integer[0]);
+        for(int i:availableAry){
+            availableSet.remove(i);
+            boolean cont=dfs(prefix*10+i,availableSet,max);
+            if(!cont)return false;
+            availableSet.add(i);
+        }
+        return true;
     }
 
 }
