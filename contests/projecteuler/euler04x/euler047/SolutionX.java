@@ -2,9 +2,9 @@ import java.io.*;
 import java.util.*;
 import java.math.*;
 
-// time limit exceeded
+// slower than Solution.java, not tested in hackerRank
 
-public class Solution {
+public class SolutionX {
 
     public static void main(String[] args) {
         // input
@@ -25,8 +25,9 @@ public class Solution {
         LinkedList<Integer> retList = new LinkedList<Integer>();
         int consecutiveCount=0;
         for(int i=2;i<N+K;++i){
-            int primeCount = getPrimeCount(i);
-            if(primeCount!=K){
+            boolean good = isGood(i,K);
+            //System.err.println(String.format("%d %d",i,good?1:0));
+            if(!good){
                 consecutiveCount=0;
                 continue;
             }
@@ -38,25 +39,29 @@ public class Solution {
         return retList;
     }
     
-    public static int getPrimeCount(int v){
-        int ret = 0;
+    public static boolean isGood(int v,int K){
+        int primeCount = 0;
         int i=0;
         while(v!=1){
-            System.err.println(v);
+            //System.err.println(v);
             int p = getPrime(i);
             if(v%p==0){
-                ++ret;
+                ++primeCount;
                 while(v%p==0){
                     v=v/p;
                 }
+                if(v==1)break;
+                if(primeCount==K){
+                    return false;
+                }
             }
             if(p*p>v){
-                ++ret;
+                ++primeCount;
                 break;
             }
             ++i;
         }
-        return ret;
+        return (primeCount==K);
     }
 
     static Vector<Integer> primeV=new Vector<Integer>();
