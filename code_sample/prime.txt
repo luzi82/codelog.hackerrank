@@ -2,24 +2,25 @@
     static int getPrime(int idx){
         if(primeV.size()==0){
             primeV.add(2);
+            primeV.add(3);
         }
         while(idx>=primeV.size()){
             int p=primeV.lastElement();
-            ++p;
             while(true){
+                p+=2;
                 boolean isPrime=true;
                 for(int pp:primeV){
                     if(p%pp==0){isPrime=false;break;}
                     if(pp*pp>p){break;}
                 }
                 if(isPrime)break;
-                ++p;
             }
             primeV.add(p);
         }
         return primeV.get(idx);
     }
 
+    // cal all prime [2,max)
     static void preparePrime(int max){
         if(primeV.size()==0){
             primeV.add(2);
