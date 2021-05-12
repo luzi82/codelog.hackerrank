@@ -24,8 +24,9 @@
     static void preparePrime(int max){
         if(primeV.size()==0){
             primeV.add(2);
+            primeV.add(3);
         }
-        int p=3;
+        int p=primeV.lastElement()+2;
         while(p<max){
             boolean isPrime=true;
             for(int pp:primeV){
